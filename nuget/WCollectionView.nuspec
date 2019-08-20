@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata minClientVersion="2.8.3">
+		<id>WCollectionView.Forms</id>
+		<version>1.0.1</version>
+		<title>Waterfall CollectionView for Xamarin Forms</title>
+		<authors>Leo Holcman</authors>
+		<owners>Javier Holcman, Leo Holcman, Wappsfactor</owners>
+		<iconUrl>http://www.wappsfactor.com/shared/logo_bw.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+		  Waterfall CollectionView with custom height for each item and more for Xamarin Android and iOS
+		</description>
+		<summary>Waterfall CollectionView for Xamarin Forms: Android and iOS.</summary>
+		<tags>xamarin, xamarin forms, forms, plugin, listview, pinterest, grid, collectionview, waterfall</tags>
+		<dependencies>
+			<group targetFramework="netstandard2.0">
+				<dependency id="Xamarin.Forms" version="3.6.0.344457" />
+			</group>
+			<group targetFramework="MonoAndroid10">
+				<dependency id="Xamarin.Forms" version="3.6.0.344457" />
+			</group>
+			<group targetFramework="Xamarin.iOS10">
+				<dependency id="Xamarin.Forms" version="3.6.0.344457" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<!--Forms-->
+		<file src="lib/netstandard2.0/Wapps.Forms.Controls.dll" target="lib/netstandard2.0/Wapps.Forms.Controls.dll" />
+		
+		<!--Xamarin.Android-->
+		<file src="lib/Wapps.Forms.Controls.dll" target="lib/MonoAndroid10/Wapps.Forms.Controls.dll" />
+		<file src="lib/Wapps.Forms.Controls.Droid.dll" target="lib/MonoAndroid10/Wapps.Forms.Controls.Droid.dll" />
+
+		<!--Xamarin.iOS-->
+		<file src="lib/Wapps.Forms.Controls.dll" target="lib/Xamarin.iOS10/Wapps.Forms.Controls.dll" />
+		<file src="lib/Wapps.Forms.IOS.Controls.dll" target="lib/Xamarin.iOS10/Wapps.Forms.IOS.Controls.dll" />
+    
+	</files>
+</package>
