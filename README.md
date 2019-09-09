@@ -1,5 +1,7 @@
 # WCollectionView.Forms
 
+[![NuGet](https://img.shields.io/nuget/v/WCollectionView.Forms)](https://www.nuget.org/packages/WCollectionView.Forms/)
+
 ##### Android 
 
 On Android, in your main `Activity`'s `OnCreate (..)` implementation, call:
