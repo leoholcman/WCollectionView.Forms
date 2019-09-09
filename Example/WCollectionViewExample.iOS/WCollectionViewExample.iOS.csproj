@@ -128,13 +128,13 @@
       <Project>{39516CA6-BEB8-4FC5-A948-96A98C68F311}</Project>
       <Name>WCollectionViewExample</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WCollectionView.iOS\WCollectionView.iOS.csproj">
-      <Project>{BBD95B6D-8B42-4614-8688-C0DAB4B7CAF1}</Project>
-      <Name>WCollectionView.iOS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\WCollectionView\WCollectionView.csproj">
       <Project>{C5A04359-A4D4-4F77-A7BE-C25AE2E32FF2}</Project>
       <Name>WCollectionView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WCollectionView.iOS\WCollectionView.iOS.csproj">
+      <Project>{BBD95B6D-8B42-4614-8688-C0DAB4B7CAF1}</Project>
+      <Name>WCollectionView.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

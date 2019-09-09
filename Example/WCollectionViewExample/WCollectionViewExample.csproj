@@ -14,6 +14,14 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Wapps.Forms.Controls">
+      <HintPath>..\..\nuget\lib\netstandard2.0\Wapps.Forms.Controls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\WCollectionView\WCollectionView.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".DS_Store" />
   </ItemGroup>
 </Project>
