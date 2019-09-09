@@ -34,7 +34,7 @@ void WCollectionView_ItemTapped(object sender, Wapps.Forms.Controls.WItemTappedE
 ```
 
 ##### Groups
-Setting `IsGroupingEnabled = true` you can define a `GroupHeaderTemplate` and set the `ItemsSource` a IEnumerable<IEnumerable>.
+Setting `IsGroupingEnabled = true` you can define a `GroupHeaderTemplate` and set the `ItemsSource` a `IEnumerable<IEnumerable>`.
 
 You can handle the Group Header tapped event
 ```csharp
