@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WCollectionView.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Wapps.Forms.IOS.Controls</AssemblyName>
+    <AssemblyName>Wapps.Forms.Controls.iOS</AssemblyName>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,9 +42,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FormsView_Utils.cs" />
-    <Compile Include="GroupedWaterfallLayout.cs" />
-    <Compile Include="WaterfallCollectionViewSource.cs" />
-    <Compile Include="WaterfallLayout.cs" />
+    <Compile Include="GroupedWLayout.cs" />
+    <Compile Include="WCollectionViewSource.cs" />
+    <Compile Include="WLayout.cs" />
     <Compile Include="WCollectionViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

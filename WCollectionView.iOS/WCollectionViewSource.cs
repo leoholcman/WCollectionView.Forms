@@ -7,9 +7,9 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-namespace Wapps.Forms.IOS.Controls
+namespace Wapps.Forms.Controls.iOS
 {
-    public class WaterfallCollectionViewSource : UICollectionViewSource
+    internal class WCollectionViewSource : UICollectionViewSource
     {
         public bool IsGroupingEnabled { get; set; }
 
@@ -31,7 +31,7 @@ namespace Wapps.Forms.IOS.Controls
 
             WFCell cell;
             if (isHeader)
-                cell = (WFCell)collectionView.DequeueReusableCell(WFHeaderCell.CELL_ID, indexPath);
+                cell = (WFCell)collectionView.DequeueReusableCell(WHeaderCell.CELL_ID, indexPath);
             else
                 cell = (WFCell)collectionView.DequeueReusableCell(WFCell.CELL_ID, indexPath);
 
@@ -81,7 +81,7 @@ namespace Wapps.Forms.IOS.Controls
 
         public override UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
         {
-            var header = (WFHeader)collectionView.DequeueReusableSupplementaryView(elementKind, WFHeader.CELL_ID, indexPath);
+            var header = (WHeader)collectionView.DequeueReusableSupplementaryView(elementKind, WHeader.CELL_ID, indexPath);
             var nativeView = Header.ToUIView(new CGRect(0, 0, header.Frame.Width, header.Frame.Height));
             header.RendererView = nativeView;
             return header;
@@ -119,23 +119,23 @@ namespace Wapps.Forms.IOS.Controls
         }
     }
 
-    internal class WFHeaderCell : WFCell
+    internal class WHeaderCell : WFCell
     {
         public new const string CELL_ID = "HEADER_CELL_ID";
 
         [Export("initWithFrame:")]
-        public WFHeaderCell(RectangleF frame) : base(frame)
+        public WHeaderCell(RectangleF frame) : base(frame)
         {
 
         }
     }
 
-    internal class WFHeader : UICollectionReusableView
+    internal class WHeader : UICollectionReusableView
     {
         public const string CELL_ID = "HEADER_ID";
 
         [Export("initWithFrame:")]
-        public WFHeader(RectangleF frame) : base(frame)
+        public WHeader(RectangleF frame) : base(frame)
         {
 
         }

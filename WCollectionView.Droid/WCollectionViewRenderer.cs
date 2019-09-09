@@ -4,11 +4,12 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using System.ComponentModel;
 using System.Collections;
+using Android.Support.V4.Widget;
 
-[assembly: ExportRenderer(typeof(Wapps.Forms.Controls.WCollectionView), typeof(Wapps.Forms.Controls.Droid.WaterfallListViewRenderer))]
+[assembly: ExportRenderer(typeof(Wapps.Forms.Controls.WCollectionView), typeof(Wapps.Forms.Controls.Droid.WCollectionViewRenderer))]
 namespace Wapps.Forms.Controls.Droid
 {
-    public class WaterfallListViewRenderer : ViewRenderer<WCollectionView, RecyclerView>
+    public class WCollectionViewRenderer : ViewRenderer<WCollectionView, WRefreshLayout>
     {
         static Context _context;
         public static void Init(Context context)
@@ -18,7 +19,7 @@ namespace Wapps.Forms.Controls.Droid
             FormsView_Utils.Init(context);
         }
 
-        public WaterfallListViewRenderer(Context context) : base(context)
+        public WCollectionViewRenderer(Context context) : base(context)
         {
 
         }
@@ -29,25 +30,33 @@ namespace Wapps.Forms.Controls.Droid
 
             if (e.PropertyName == WCollectionView.ItemsSourceProperty.PropertyName && Control != null)
             {
-                RefreshItemsSource();
+                UpdateItemsSource();
             }
             else if (e.PropertyName == nameof(Element.BackgroundColor) && Control != null)
             {
                 Control.SetBackgroundColor(Element.BackgroundColor.ToAndroid());
+            }
+            else if (e.PropertyName == nameof(Element.IsPullToRefreshEnabled))
+            {
+                UpdateIsPullToRefreshEnabled();
+            }
+            else if (e.PropertyName == nameof(Element.IsRefreshing))
+            {
+                UpdateIsRefreshing();
             }
 
             if (Control == null && Element.Width > 0)
                 CreateView();
         }
 
-        void RefreshItemsSource()
+        void UpdateItemsSource()
         {
-            var adapter = (WaterfallAdapter)Control.GetAdapter();
+            var adapter = (WaterfallAdapter)Control.RecyclerView.GetAdapter();
             adapter.ItemsSource = Element.ItemsSource;
             adapter.NotifyDataSetChanged();
 
             if (Element.ItemsSource != null && Element.ItemsSource.Count() > 0)
-                Control.ScrollToPosition(0);
+                Control.RecyclerView.ScrollToPosition(0);
         }
 
         void CreateView()
@@ -63,7 +72,10 @@ namespace Wapps.Forms.Controls.Droid
             adapter.ItemWidth = Element.Width / Element.ColumnCount;
 
             recyclerView.SetAdapter(adapter);
-            SetNativeControl(recyclerView);
+
+            var refreshLayout = new WRefreshLayout(_context, recyclerView);
+            refreshLayout.Refresh += RefreshLayout_Refresh;
+            SetNativeControl(refreshLayout);
         }
 
         void Adapter_ItemClicked(object sender, object item)
@@ -75,6 +87,51 @@ namespace Wapps.Forms.Controls.Droid
             }
 
             Element.InvokeItemTapped(item);
+        }
+
+        #region Pull To Refresh
+
+        void UpdateIsPullToRefreshEnabled()
+        {
+            Control.Enabled = Element.IsPullToRefreshEnabled;
+        }
+
+        void UpdateIsRefreshing()
+        {
+            if (!Element.IsPullToRefreshEnabled)
+                return;
+
+            Control.Refreshing = Element.IsRefreshing;
+        }
+
+        void RefreshLayout_Refresh(object sender, System.EventArgs e)
+        {
+            Element.IsRefreshing = Control.Refreshing;
+        }
+
+        #endregion
+    }
+
+    public class WRefreshLayout : SwipeRefreshLayout
+    {
+        public RecyclerView RecyclerView { get; private set; }
+
+        public WRefreshLayout(Context context, RecyclerView recyclerView) : base(context)
+        {
+            AddView(recyclerView);
+            RecyclerView = recyclerView;
+        }
+    }
+
+    internal static class Utils
+    {
+        public static int Count(this IEnumerable enumerable)
+        {
+            var count = 0;
+            foreach (var item in enumerable)
+                count++;
+
+            return count;
         }
     }
 }

@@ -49,7 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DroidUtils.cs" />
     <Compile Include="FormsView_Utils.cs" />
-    <Compile Include="WaterfallAdapter.cs" />
+    <Compile Include="WAdapter.cs" />
     <Compile Include="WCollectionViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

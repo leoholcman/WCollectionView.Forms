@@ -14,6 +14,8 @@ namespace Wapps.Forms.Controls
 
         public event Action<object, WItemTappedEventArgs> HeaderTapped;
 
+        public event EventHandler Refreshing;
+
         public int ColumnCount { get; set; } = 2;
 
         public double MinCellHeight { get; set; } = 150;
@@ -23,7 +25,21 @@ namespace Wapps.Forms.Controls
         public double HeaderTemplateHeight { get; set; } = 250;
 
         public GetHeightForItemDelegate GetHeightForCellDelegate { get; set; }
-        
+
+        public static readonly BindableProperty IsPullToRefreshEnabledProperty = BindableProperty.Create("IsPullToRefreshEnabled", typeof(bool), typeof(WCollectionView), false);
+        public bool IsPullToRefreshEnabled
+        {
+            get => (bool)GetValue(IsPullToRefreshEnabledProperty);
+            set => SetValue(IsPullToRefreshEnabledProperty, value);
+        }
+
+        public static readonly BindableProperty IsRefreshingProperty = BindableProperty.Create("IsRefreshing", typeof(bool), typeof(WCollectionView), false, BindingMode.TwoWay);
+        public bool IsRefreshing
+        {
+            get => (bool)GetValue(IsRefreshingProperty);
+            set => SetValue(IsRefreshingProperty, value);
+        }
+
         public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(WCollectionView), null);
         public IEnumerable ItemsSource
         {
@@ -72,6 +88,13 @@ namespace Wapps.Forms.Controls
             get { return (ICommand)GetValue(HeaderTappedCommandProperty); }
             set { SetValue(HeaderTappedCommandProperty, value); }
         }
+        
+        public static readonly BindableProperty RefreshCommandProperty = BindableProperty.Create(nameof(RefreshCommand), typeof(ICommand), typeof(WCollectionView), null);
+        public ICommand RefreshCommand
+        {
+            get { return (ICommand)GetValue(RefreshCommandProperty); }
+            set { SetValue(RefreshCommandProperty, value); }
+        }
 
         public WCollectionView()
         {
@@ -90,7 +113,10 @@ namespace Wapps.Forms.Controls
                 return;
 
             ItemTapped?.Invoke(this, new WItemTappedEventArgs(item));
-            ItemTappedCommand?.Execute(item);
+            if (ItemTappedCommand != null && ItemTappedCommand.CanExecute(item))
+			{
+				ItemTappedCommand.Execute(item);
+			}
         }
 
         public void InvokeHeaderTapped(object item)
@@ -98,8 +124,11 @@ namespace Wapps.Forms.Controls
             if (item == null)
                 return;
 
-            HeaderTapped?.Invoke(this, new WItemTappedEventArgs(item));
-            HeaderTappedCommand?.Execute(item);
+            HeaderTapped?.Invoke(this, new WItemTappedEventArgs(item));            
+            if (HeaderTappedCommand != null && HeaderTappedCommand.CanExecute(item))
+			{
+				HeaderTappedCommand.Execute(item);
+			}
         }
 
         List<object> _sourceList = new List<object>();
@@ -116,7 +145,34 @@ namespace Wapps.Forms.Controls
                         _sourceList.Add(obj);
                 }
             }
+            else if (propertyName == IsRefreshingProperty.PropertyName)
+            {
+                if (!IsPullToRefreshEnabled)
+                    return;
+
+                Refreshing?.Invoke(this, new EventArgs());
+
+                if (IsRefreshing && RefreshCommand != null && RefreshCommand.CanExecute(null))
+                {
+                    RefreshCommand.Execute(null);
+                }
+            }
         }
+
+        #region Public Members
+
+        public void BeginRefresh()
+        {
+            if (IsPullToRefreshEnabled)
+                IsRefreshing = true;
+        }
+
+        public void EndRefresh()
+        {
+            IsRefreshing = false;
+        }
+
+        #endregion
     }
 
     public delegate double GetHeightForItemDelegate(object item);
@@ -128,18 +184,6 @@ namespace Wapps.Forms.Controls
         internal WItemTappedEventArgs(object item)
         {
             Item = item;
-        }
-    }
-
-    public static class Utils
-    {
-        public static int Count(this IEnumerable enumerable)
-        {
-            var count = 0;
-            foreach (var item in enumerable)
-                count++;
-
-            return count;
         }
     }
 }

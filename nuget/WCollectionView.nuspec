@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata minClientVersion="2.8.3">
 		<id>WCollectionView.Forms</id>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 		<title>Waterfall CollectionView for Xamarin Forms</title>
 		<authors>Leo Holcman</authors>
 		<owners>Javier Holcman, Leo Holcman, Wappsfactor</owners>
@@ -35,7 +35,7 @@
 
 		<!--Xamarin.iOS-->
 		<file src="lib/Wapps.Forms.Controls.dll" target="lib/Xamarin.iOS10/Wapps.Forms.Controls.dll" />
-		<file src="lib/Wapps.Forms.IOS.Controls.dll" target="lib/Xamarin.iOS10/Wapps.Forms.IOS.Controls.dll" />
+		<file src="lib/Wapps.Forms.Controls.iOS.dll" target="lib/Xamarin.iOS10/Wapps.Forms.Controls.iOS.dll" />
     
 	</files>
 </package>

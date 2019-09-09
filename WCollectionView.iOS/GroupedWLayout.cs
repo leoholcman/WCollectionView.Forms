@@ -4,9 +4,9 @@ using UIKit;
 using System.Collections.Generic;
 using CoreGraphics;
 
-namespace Wapps.Forms.IOS.Controls
+namespace Wapps.Forms.Controls.iOS
 {
-    internal class GroupedWaterfallLayout : WaterfallViewLayout
+    internal class GroupedWLayout : WViewLayout
     {
         public double HeaderTemplateHeight { get; set; }
 

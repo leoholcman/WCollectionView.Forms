@@ -8,8 +8,8 @@ using Wapps.Forms.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(WCollectionView), typeof(Wapps.Forms.IOS.Controls.WCollectionViewRenderer))]
-namespace Wapps.Forms.IOS.Controls
+[assembly: ExportRenderer(typeof(WCollectionView), typeof(Wapps.Forms.Controls.iOS.WCollectionViewRenderer))]
+namespace Wapps.Forms.Controls.iOS
 {
     public class WCollectionViewRenderer : ViewRenderer<WCollectionView, UICollectionView>
     {
@@ -20,9 +20,11 @@ namespace Wapps.Forms.IOS.Controls
 
         List<object> SourceList { get; set; } = new List<object>();
 
-        WaterfallViewLayout _layout;
+        WViewLayout _layout;
 
         List<int?> HeaderIndexes { get; set; } = new List<int?>();
+
+        UIRefreshControl RefreshControl { get; set; }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -34,7 +36,7 @@ namespace Wapps.Forms.IOS.Controls
             }
             else if (e.PropertyName == nameof(Element.ItemsSource) && Control != null)
             {
-                RefreshItemsSource();
+                UpdateItemsSource();
             }
             else if (e.PropertyName == nameof(Element.BackgroundColor) && Control != null)
             {
@@ -42,21 +44,29 @@ namespace Wapps.Forms.IOS.Controls
             }
             else if (e.PropertyName == nameof(Element.Header) && Control != null)
             {
-                RefreshHeader();
+                UpdateHeader();
+            }
+            else if (e.PropertyName == nameof(Element.IsPullToRefreshEnabled))
+            {
+                UpdateIsPullToRefreshEnabled();
+            }
+            else if (e.PropertyName == nameof(Element.IsRefreshing))
+            {
+                UpdateIsRefreshing();
             }
         }
 
-        void RefreshItemsSource()
+        void UpdateItemsSource()
         {
             InitSource();
             Device.BeginInvokeOnMainThread(() =>
             {
-                var source = (WaterfallCollectionViewSource)Control.Source;
+                var source = (WCollectionViewSource)Control.Source;
 
                 if (Element.IsGroupingEnabled)
                 {
                     source.HeaderIndexes = HeaderIndexes;
-                    (_layout as GroupedWaterfallLayout).HeaderIndexes = HeaderIndexes;
+                    (_layout as GroupedWLayout).HeaderIndexes = HeaderIndexes;
                 }
                 else
                 {
@@ -73,9 +83,9 @@ namespace Wapps.Forms.IOS.Controls
             });
         }
 
-        void RefreshHeader()
+        void UpdateHeader()
         {
-            var source = (WaterfallCollectionViewSource)Control.Source;
+            var source = (WCollectionViewSource)Control.Source;
             source.Header = Element.Header;
             _layout.Header = Element.Header;
         }
@@ -90,7 +100,7 @@ namespace Wapps.Forms.IOS.Controls
 
             if (Element.IsGroupingEnabled)
             {
-                var layout = new GroupedWaterfallLayout();
+                var layout = new GroupedWLayout();
                 layout.ItemsSource = SourceList;
                 layout.HeaderTemplateHeight = Element.HeaderTemplateHeight;
 
@@ -98,7 +108,7 @@ namespace Wapps.Forms.IOS.Controls
             }
             else
             {
-                _layout = new WaterfallLayout();
+                _layout = new WLayout();
                 _layout.ItemsSource = SourceList;
             }
 
@@ -108,7 +118,7 @@ namespace Wapps.Forms.IOS.Controls
             _layout.MaxCellHeight = Element.MaxCellHeight;
             _layout.Header = Element.Header;
 
-            var source = new WaterfallCollectionViewSource();
+            var source = new WCollectionViewSource();
             source.ItemTemplate = Element.ItemTemplate;
             source.HeaderTemplate = Element.GroupHeaderTemplate;
             source.ItemClicked += Source_ItemClicked;
@@ -119,14 +129,25 @@ namespace Wapps.Forms.IOS.Controls
             var frame = new CGRect(0, 0, Element.Width, Element.Height);
             var collectionView = new UICollectionView(frame, _layout);
             collectionView.RegisterClassForCell(typeof(WFCell), WFCell.CELL_ID);
-            collectionView.RegisterClassForCell(typeof(WFHeaderCell), WFHeaderCell.CELL_ID);
+            collectionView.RegisterClassForCell(typeof(WHeaderCell), WHeaderCell.CELL_ID);
             collectionView.Source = source;
             collectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
+            collectionView.AlwaysBounceVertical = true;
 
             if (Element.Header != null)
-                collectionView.RegisterClassForSupplementaryView(typeof(WFHeader), UICollectionElementKindSection.Header, WFHeader.CELL_ID);
+                collectionView.RegisterClassForSupplementaryView(typeof(WHeader), UICollectionElementKindSection.Header, WHeader.CELL_ID);
+
+            var refreshControl = new UIRefreshControl();
+            refreshControl.TintColor = UIColor.Gray;
+            refreshControl.ValueChanged += RefreshControl_ValueChanged;
+
+            if (Element.IsPullToRefreshEnabled)
+            {
+                collectionView.AddSubview(refreshControl);
+            }
 
             SetNativeControl(collectionView);
+            RefreshControl = refreshControl;
         }
 
         void Source_ItemClicked(int row)
@@ -177,5 +198,40 @@ namespace Wapps.Forms.IOS.Controls
                     SourceList.Add(item);
             }
         }
+
+        #region Pull To Refresh
+
+        void UpdateIsPullToRefreshEnabled()
+        {
+            if (Element.IsPullToRefreshEnabled)
+                Control.AddSubview(RefreshControl);
+            else
+                RefreshControl.RemoveFromSuperview();
+        }
+
+        void UpdateIsRefreshing()
+        {
+            if (!Element.IsPullToRefreshEnabled)
+                return;
+
+            if (Element.IsRefreshing)
+            {
+                if (!RefreshControl.Refreshing)
+                    Control.SetContentOffset(new CGPoint(0, RefreshControl.Frame.Height * -1), true);
+
+                RefreshControl.BeginRefreshing();
+            }
+            else
+            {
+                RefreshControl.EndRefreshing();
+            }
+        }
+
+        void RefreshControl_ValueChanged(object sender, System.EventArgs e)
+        {
+            Element.IsRefreshing = RefreshControl.Refreshing;
+        }
+
+        #endregion
     }
 }

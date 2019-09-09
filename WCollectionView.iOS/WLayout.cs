@@ -6,9 +6,9 @@ using CoreGraphics;
 using Xamarin.Forms;
 using Wapps.Forms.Controls;
 
-namespace Wapps.Forms.IOS.Controls
+namespace Wapps.Forms.Controls.iOS
 {
-    internal class WaterfallLayout : WaterfallViewLayout
+    internal class WLayout : WViewLayout
     {
         protected override void OnItemsSourcePropertyChanged()
         {
@@ -106,7 +106,7 @@ namespace Wapps.Forms.IOS.Controls
         }
     }
 
-    internal abstract class WaterfallViewLayout : UICollectionViewLayout
+    internal abstract class WViewLayout : UICollectionViewLayout
     {
         public int ColumnCount { get; set; }
 

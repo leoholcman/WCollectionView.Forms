@@ -4,7 +4,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-namespace Wapps.Forms.IOS.Controls
+namespace Wapps.Forms.Controls.iOS
 {
     internal static class FormsView_Utils
     {

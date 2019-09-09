@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Wapps="clr-namespace:Wapps.Forms.Controls;assembly=Wapps.Forms.Controls"
+             mc:Ignorable="d"
+             x:Class="WCollectionViewExample.MainPage">
+
+    <StackLayout Spacing="0">
+        <!-- Place new controls here -->
+        <Label Margin="0,20,0,0"  Text="Welcome to Xamarin.Forms!" HorizontalOptions="Center" VerticalOptions="Start" />
+        <Wapps:WCollectionView x:Name="Lv" VerticalOptions="FillAndExpand" Refreshing="Lv_Refreshing" ColumnCount="3"
+                               IsPullToRefreshEnabled="true" ItemTapped="WaterfallListView_ItemTapped">
+            <Wapps:WCollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="5">
+                        <ContentView IsClippedToBounds="true" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />            
+                        </ContentView>
+                        <Label Text="{Binding Title}" />
+                    </StackLayout>
+                </DataTemplate>
+            </Wapps:WCollectionView.ItemTemplate>
+        </Wapps:WCollectionView>
+
+    </StackLayout>
+
+</ContentPage>
