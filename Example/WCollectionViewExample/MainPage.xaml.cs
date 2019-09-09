@@ -38,16 +38,16 @@ namespace WCollectionViewExample
                 cells.Add(cellInf);
             }
 
-            Lv.ItemsSource = cells;
+            Cv.ItemsSource = cells;
         }
 
-        async void Lv_Refreshing(object sender, EventArgs args)
+        async void Cv_Refreshing(object sender, EventArgs args)
         {
             await System.Threading.Tasks.Task.Delay(3000);
-            Lv.EndRefresh();
+            Cv.EndRefresh();
         }
 
-        void WaterfallListView_ItemTapped(object sender, WItemTappedEventArgs args)
+        void WCollectionView_ItemTapped(object sender, WItemTappedEventArgs args)
         {
             var messi = args.Item as CellInfo;
             DisplayAlert("Atencion!", messi.Title, "Ok");

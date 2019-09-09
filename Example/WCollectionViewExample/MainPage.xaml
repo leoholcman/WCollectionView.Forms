@@ -10,8 +10,8 @@
     <StackLayout Spacing="0">
         <!-- Place new controls here -->
         <Label Margin="0,20,0,0"  Text="Welcome to Xamarin.Forms!" HorizontalOptions="Center" VerticalOptions="Start" />
-        <Wapps:WCollectionView x:Name="Lv" VerticalOptions="FillAndExpand" Refreshing="Lv_Refreshing" ColumnCount="3"
-                               IsPullToRefreshEnabled="true" ItemTapped="WaterfallListView_ItemTapped">
+        <Wapps:WCollectionView x:Name="Cv" VerticalOptions="FillAndExpand" Refreshing="Cv_Refreshing" ColumnCount="3"
+                               IsPullToRefreshEnabled="true" ItemTapped="WCollectionView_ItemTapped">
             <Wapps:WCollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="5">

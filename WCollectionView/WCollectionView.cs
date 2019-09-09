@@ -98,11 +98,11 @@ namespace Wapps.Forms.Controls
 
         public WCollectionView()
         {
-            PropertyChanged += WaterfallListView_PropertyChanged;
+            PropertyChanged += WCollectionView_PropertyChanged;
             IsClippedToBounds = true;
         }
 
-        void WaterfallListView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        void WCollectionView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 
         }
